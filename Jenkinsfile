@@ -26,15 +26,8 @@ pipeline {
 
     stage('Deployment Stage') {
       steps {
-        echo 'deploying...'
+        echo 'deploying'
       }
     }
-
-    stage('Sonar-Report') {
-      steps {
-        bat 'mvn clean install sonar:sonar -Dsonar.host.url=http://localhost:9000 -Dsonar.analysis.mode=publish org.codehaus.sonar-plugins.pdf-report:maven-pdfreport-plugin:1.3:generate'
-      }
-    }
-
   }
 }
