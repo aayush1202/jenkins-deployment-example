@@ -1,40 +1,40 @@
 pipeline {
-    agent {
-        label 'master'
+  agent {
+    node {
+      label 'windows_slave_01'
     }
-    stages {
-        stage('Build') {
-            steps {
-                bat 'mvn -B -DskipTests clean package'
-            }
-        }
-//         stage('Sonar-Report') {
-//             steps {
-//             sh 'mvn sonar:sonar \
-//   -Dsonar.projectKey=jenkins_project \
-//   -Dsonar.host.url=http://localhost:9000 \
-//   -Dsonar.login=5f09ded7e5db4d0ea0dcfd937c181af706e60475'
-//             }
-//         }
-        stage('Test') { 
-            steps {
-                bat 'mvn test' 
-            }
-            post {
-                always {
-                    junit 'target/surefire-reports/*.xml' 
-                }
-            }
-        }
-        stage ('Deployment Stage') {
-           steps {
-               echo 'deploying...'
-           }
-       }
-        stage('Sonar-Report') {
-            steps {
-                bat 'mvn clean install sonar:sonar -Dsonar.host.url=http://localhost:9000 -Dsonar.analysis.mode=publish org.codehaus.sonar-plugins.pdf-report:maven-pdfreport-plugin:1.3:generate'
-            }
-        }
+
+  }
+  stages {
+    stage('Build') {
+      steps {
+        bat 'mvn -B -DskipTests clean package'
+      }
     }
+
+    stage('Test') {
+      post {
+        always {
+          junit 'target/surefire-reports/*.xml'
+        }
+
+      }
+      steps {
+        bat 'mvn test'
+      }
+    }
+
+    stage('Deployment Stage') {
+      steps {
+        echo 'deploying...'
+      }
+    }
+
+    stage('Sonar-Report') {
+      steps {
+        bat 'mvn clean install sonar:sonar -Dsonar.host.url=http://localhost:9000 -Dsonar.analysis.mode=publish org.codehaus.sonar-plugins.pdf-report:maven-pdfreport-plugin:1.3:generate'
+      }
+    }
+
+  }
 }
