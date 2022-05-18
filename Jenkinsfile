@@ -26,7 +26,7 @@ pipeline {
 
     stage('Deployment Stage') {
       steps {
-        echo 'deploying'
+        bat 'java -jar C:/jenkins_slave_01/workspace/pipeline_job/target/jenkins-example-1.0-SNAPSHOT.jar'
       }
     }
   }
